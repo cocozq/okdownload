@@ -27,8 +27,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.StatFs;
 import android.provider.OpenableColumns;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.liulishuo.okdownload.BuildConfig;
@@ -55,8 +55,6 @@ import java.util.Map;
 import java.util.concurrent.ThreadFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class Util {
 
@@ -293,10 +291,21 @@ public class Util {
         return new DownloadUrlConnection.Factory();
     }
 
+
+    /**
+     * 检查 下载文件块
+     * @param task
+     * @param info
+     * @param instanceLength
+     * @param isAcceptRange
+     */
     public static void assembleBlock(@NonNull DownloadTask task, @NonNull BreakpointInfo info,
                                      long instanceLength,
                                      boolean isAcceptRange) {
         final int blockCount;
+
+        Util.d("OkdownloadUtil", "检查块 instanceLength: " + instanceLength + " ,isAcceptRange: " + isAcceptRange);
+
         if (OkDownload.with().downloadStrategy().isUseMultiBlock(isAcceptRange)) {
             blockCount = OkDownload.with().downloadStrategy()
                     .determineBlockCount(task, instanceLength);
@@ -318,6 +327,7 @@ public class Util {
                 contentLength = eachLength;
             }
 
+            Util.d("OkdownloadUtil", "添加下载块数据 i: " + i + " ,startOffset：" + startOffset + " ,contentLength: " + contentLength);
             final BlockInfo blockInfo = new BlockInfo(startOffset, contentLength);
             info.addBlock(blockInfo);
         }
@@ -383,8 +393,11 @@ public class Util {
         if (cursor != null) {
             try {
                 cursor.moveToFirst();
-                return cursor
-                        .getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                int columnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                if(columnIndex >= 0) {
+                    return cursor.getString(columnIndex);
+                }
+                return "";
             } finally {
                 cursor.close();
             }
@@ -393,7 +406,7 @@ public class Util {
         return null;
     }
 
-    @SuppressFBWarnings(value = "DMI")
+//    @SuppressFBWarnings(value = "DMI")
     @NonNull public static File getParentFile(final File file) {
         final File candidate = file.getParentFile();
         return candidate == null ? new File("/") : candidate;
@@ -405,8 +418,11 @@ public class Util {
         if (cursor != null) {
             try {
                 cursor.moveToFirst();
-                return cursor
-                        .getLong(cursor.getColumnIndex(OpenableColumns.SIZE));
+                int columnIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+                if(columnIndex >= 0) {
+                    return cursor.getLong(columnIndex);
+                }
+                return 0;
             } finally {
                 cursor.close();
             }
@@ -452,7 +468,7 @@ public class Util {
     }
 
     public static void addDefaultUserAgent(@NonNull final DownloadConnection connection) {
-        final String userAgent = "OkDownload/" + BuildConfig.VERSION_NAME;
+        final String userAgent = "OkDownload/" + "2323";
         connection.addHeader(USER_AGENT, userAgent);
     }
 }

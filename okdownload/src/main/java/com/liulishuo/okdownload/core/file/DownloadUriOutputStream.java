@@ -20,7 +20,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.system.OsConstants;
@@ -49,15 +49,6 @@ public class DownloadUriOutputStream implements DownloadOutputStream {
         this.fos = new FileOutputStream(pdf.getFileDescriptor());
         this.channel = fos.getChannel();
         this.out = new BufferedOutputStream(fos, bufferSize);
-    }
-
-    DownloadUriOutputStream(@NonNull FileChannel channel, @NonNull ParcelFileDescriptor pdf,
-                            @NonNull FileOutputStream fos,
-                            @NonNull BufferedOutputStream out) {
-        this.channel = channel;
-        this.pdf = pdf;
-        this.fos = fos;
-        this.out = out;
     }
 
     @Override

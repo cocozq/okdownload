@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace "com.liulishuo.okdownload"
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
@@ -23,14 +24,7 @@ android {
 }
 
 dependencies {
-    testImplementation dep.junit
-    testImplementation dep.mockito
-    testImplementation dep.assertj
-    testImplementation dep.robolectric
-
     implementation dep.supportAnnotations
-
-    compileOnly dep.findbugsAnnotations
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

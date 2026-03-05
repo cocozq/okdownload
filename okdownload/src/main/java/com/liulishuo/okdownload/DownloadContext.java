@@ -20,8 +20,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.liulishuo.okdownload.core.Util;
 import com.liulishuo.okdownload.core.cause.EndCause;
@@ -39,8 +39,6 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class DownloadContext {
 
@@ -75,8 +73,8 @@ public class DownloadContext {
         return started;
     }
 
-    @SuppressFBWarnings(value = "EI",
-            justification = "user must know change this array will effect internal job")
+//    @SuppressFBWarnings(value = "EI",
+//            justification = "user must know change this array will effect internal job")
     public DownloadTask[] getTasks() {
         return tasks;
     }

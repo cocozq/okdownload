@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    namespace "com.liulishuo.okdownload.sample"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.liulishuo.okdownload.sample"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        release {
+            storeFile rootProject.file('keystore')
+            storePassword 'okdownload'
+            keyAlias 'okdownload'
+            keyPassword 'okdownload'
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation dep.kotlin
+    //noinspection GradleDependency source code is not available on 26
+    implementation dep.supportDesign
+    //noinspection GradleDependency source code is not available on 26
+    implementation dep.supportV7
+
+    implementation dep.supportCardview
+
+    implementation dep.kotlinxCoroutines
+    implementation dep.kotlinxCoroutineAndroid
+    implementation dep.supportConstraintLayout
+
+    implementation project(':okdownload')
+    implementation project(':sqlite')
+    implementation project(':okhttp')
+    implementation project(':kotlin')
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}

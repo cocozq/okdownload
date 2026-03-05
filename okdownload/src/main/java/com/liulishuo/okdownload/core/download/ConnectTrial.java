@@ -16,9 +16,9 @@
 
 package com.liulishuo.okdownload.core.download;
 
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.liulishuo.okdownload.DownloadListener;
 import com.liulishuo.okdownload.DownloadTask;
@@ -175,6 +175,12 @@ public class ConnectTrial {
         return info.getEtag() != null && !info.getEtag().equals(responseEtag);
     }
 
+    /**
+     * 判断服务器是否 允许分段 请求
+     * @param connected
+     * @return
+     * @throws IOException
+     */
     private static boolean isAcceptRange(@NonNull DownloadConnection.Connected connected)
             throws IOException {
         if (connected.getResponseCode() == HttpURLConnection.HTTP_PARTIAL) return true;

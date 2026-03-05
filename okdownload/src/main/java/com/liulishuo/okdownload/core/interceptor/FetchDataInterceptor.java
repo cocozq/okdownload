@@ -16,10 +16,11 @@
 
 package com.liulishuo.okdownload.core.interceptor;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.liulishuo.okdownload.DownloadTask;
 import com.liulishuo.okdownload.OkDownload;
+import com.liulishuo.okdownload.core.Util;
 import com.liulishuo.okdownload.core.dispatcher.CallbackDispatcher;
 import com.liulishuo.okdownload.core.download.DownloadChain;
 import com.liulishuo.okdownload.core.exception.InterruptException;
@@ -29,7 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class FetchDataInterceptor implements Interceptor.Fetch {
-
+    private static final String TAG = "FetchDataInterceptor";
     private final InputStream inputStream;
 
     private final byte[] readBuffer;
@@ -44,6 +45,7 @@ public class FetchDataInterceptor implements Interceptor.Fetch {
                                 DownloadTask task) {
         this.blockIndex = blockIndex;
         this.inputStream = inputStream;
+        Util.d(TAG, "每次读取的大小 blockIndex: " + blockIndex + " ,readBuffer " + task.getReadBufferSize());
         this.readBuffer = new byte[task.getReadBufferSize()];
         this.outputStream = outputStream;
 
@@ -60,6 +62,7 @@ public class FetchDataInterceptor implements Interceptor.Fetch {
         OkDownload.with().downloadStrategy().inspectNetworkOnWifi(chain.getTask());
         // fetch
         int fetchLength = inputStream.read(readBuffer);
+
         if (fetchLength == -1) {
             return fetchLength;
         }

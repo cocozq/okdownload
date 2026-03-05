@@ -19,8 +19,8 @@ package com.liulishuo.okdownload.core.file;
 import android.net.Uri;
 import android.os.StatFs;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.SparseArray;
 
 import com.liulishuo.okdownload.DownloadTask;
@@ -47,8 +47,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.LockSupport;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class MultiPointOutputStream {
     private static final String TAG = "MultiPointOutputStream";
@@ -83,7 +81,7 @@ public class MultiPointOutputStream {
     IOException syncException;
     @NonNull ArrayList<Integer> noMoreStreamList;
 
-    @SuppressFBWarnings("IS2_INCONSISTENT_SYNC")
+//    @SuppressFBWarnings("IS2_INCONSISTENT_SYNC")
     List<Integer> requireStreamBlocks;
 
     MultiPointOutputStream(@NonNull final DownloadTask task,
@@ -173,8 +171,8 @@ public class MultiPointOutputStream {
                     close(blockIndex);
                 } catch (IOException e) {
                     // just ignored and print log.
-                    Util.d(TAG, "OutputStream close failed task[" + task.getId()
-                            + "] block[" + blockIndex + "]" + e);
+                    Util.e(TAG, "OutputStream close failed task[" + task.getId()
+                            + "] block[" + blockIndex + "]", e);
                 }
             }
 
@@ -184,7 +182,7 @@ public class MultiPointOutputStream {
 
     final StreamsState doneState = new StreamsState();
 
-    public void done(int blockIndex) throws IOException {
+    public synchronized void done(int blockIndex) throws IOException {
         noMoreStreamList.add(blockIndex);
 
         try {
@@ -258,6 +256,9 @@ public class MultiPointOutputStream {
 
     public void inspectComplete(int blockIndex) throws IOException {
         final BlockInfo blockInfo = info.getBlock(blockIndex);
+        long currentOffset = blockInfo.getCurrentOffset();
+        long contentLength = blockInfo.getContentLength();
+        Util.d(TAG, "currentOffset: " + currentOffset + " ,contentLength: " + contentLength);
         if (!Util.isCorrectFull(blockInfo.getCurrentOffset(), blockInfo.getContentLength())) {
             throw new IOException("The current offset on block-info isn't update correct, "
                     + blockInfo.getCurrentOffset() + " != " + blockInfo.getContentLength()
@@ -280,7 +281,11 @@ public class MultiPointOutputStream {
         final DownloadOutputStream outputStream = outputStreamMap.get(blockIndex);
         if (outputStream != null) {
             outputStream.close();
-            outputStreamMap.remove(blockIndex);
+            synchronized (noSyncLengthMap) {
+                // make sure the length of noSyncLengthMap is equal to outputStreamMap
+                outputStreamMap.remove(blockIndex);
+                noSyncLengthMap.remove(blockIndex);
+            }
             Util.d(TAG, "OutputStream close task[" + task.getId() + "] block[" + blockIndex + "]");
         }
     }
@@ -471,7 +476,7 @@ public class MultiPointOutputStream {
             }
             success = true;
         } catch (IOException ex) {
-            Util.w(TAG, "OutputStream flush and sync data to filesystem failed " + ex);
+            Util.e(TAG, "OutputStream flush and sync data to filesystem failed ", ex);
             success = false;
         }
 
@@ -529,6 +534,9 @@ public class MultiPointOutputStream {
                 if (seekPoint > 0) {
                     // seek to target point
                     outputStream.seek(seekPoint);
+                    Util.d(TAG, "Create output stream write from (" + task.getId()
+                            + ") block(" + blockIndex + ") " + seekPoint);
+                } else {
                     Util.d(TAG, "Create output stream write from (" + task.getId()
                             + ") block(" + blockIndex + ") " + seekPoint);
                 }

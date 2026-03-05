@@ -22,13 +22,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class OkDownloadProvider extends ContentProvider {
-    @SuppressFBWarnings(value = "ST")
+//    @SuppressFBWarnings(value = "ST")
     @SuppressLint("StaticFieldLeak")
     public static Context context;
 

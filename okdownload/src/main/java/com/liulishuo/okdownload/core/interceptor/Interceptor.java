@@ -16,7 +16,7 @@
 
 package com.liulishuo.okdownload.core.interceptor;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.liulishuo.okdownload.core.connection.DownloadConnection;
 import com.liulishuo.okdownload.core.download.DownloadChain;
@@ -25,8 +25,8 @@ import java.io.IOException;
 
 public interface Interceptor {
     interface Connect {
-        @NonNull DownloadConnection.Connected interceptConnect(DownloadChain chain)
-                throws IOException;
+        @NonNull
+        DownloadConnection.Connected interceptConnect(DownloadChain chain) throws IOException;
     }
 
     interface Fetch {

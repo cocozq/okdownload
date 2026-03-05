@@ -17,7 +17,7 @@
 package com.liulishuo.okdownload.core.download;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.liulishuo.okdownload.DownloadTask;
 import com.liulishuo.okdownload.OkDownload;
@@ -62,7 +62,7 @@ public class BreakpointLocalCheck {
      * {@code infoRight} or {@code outputStreamSupport} is {@code false}, the result will be
      * {@code false}.
      *
-     * @return whether the local data is dirty.
+     * @return 判断本地是否是脏数据
      */
     public boolean isDirty() {
         return dirty;

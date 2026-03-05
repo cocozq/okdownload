@@ -19,8 +19,8 @@ package com.liulishuo.okdownload.core.download;
 import android.Manifest;
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.liulishuo.okdownload.DownloadTask;
 import com.liulishuo.okdownload.OkDownload;
@@ -68,26 +68,37 @@ public class DownloadStrategy {
         return new ResumeAvailableResponseCheck(connected, blockIndex, info);
     }
 
+    /**
+     * 计算 分几块下载
+     * @param task
+     * @param totalLength
+     * @return
+     */
     public int determineBlockCount(@NonNull DownloadTask task, long totalLength) {
         if (task.getSetConnectionCount() != null) return task.getSetConnectionCount();
 
         if (totalLength < ONE_CONNECTION_UPPER_LIMIT) {
+            Util.d(TAG, "小于1M，不分块下载");
             return 1;
         }
 
         if (totalLength < TWO_CONNECTION_UPPER_LIMIT) {
+            Util.d(TAG, "小于5M，分2块下载");
             return 2;
         }
 
         if (totalLength < THREE_CONNECTION_UPPER_LIMIT) {
+            Util.d(TAG, "小于50M，分3块下载");
             return 3;
         }
 
         if (totalLength < FOUR_CONNECTION_UPPER_LIMIT) {
+            Util.d(TAG, "小于100M，分4块下载");
             return 4;
         }
 
         return 5;
+//        return 1;
     }
 
     public long reuseIdledSameInfoThresholdBytes() {

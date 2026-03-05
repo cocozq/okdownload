@@ -16,7 +16,7 @@
 
 package com.liulishuo.okdownload.core.download;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.liulishuo.okdownload.core.Util;
 import com.liulishuo.okdownload.core.cause.ResumeFailedCause;
@@ -143,7 +143,7 @@ public class DownloadCache {
             setUnknownError(e);
             if (!(e instanceof SocketException)) {
                 // we know socket exception, so ignore it,  otherwise print stack trace.
-                Util.d("DownloadCache", "catch unknown error " + e);
+                Util.e("DownloadCache", "catch unknown error ", e);
             }
         }
     }

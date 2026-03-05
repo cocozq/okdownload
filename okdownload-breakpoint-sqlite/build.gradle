@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace "com.liulishuo.okdownload.breakpoint.sqlite"
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
@@ -19,12 +20,6 @@ android {
 }
 
 dependencies {
-    testImplementation dep.junit
-    testImplementation dep.mockito
-    testImplementation dep.assertj
-    testImplementation dep.robolectric
-    testImplementation project(':okdownload')
-    
     implementation dep.supportAnnotations
 
     compileOnly project(':okdownload')
