@@ -7,4 +7,3 @@
 /captures
 .externalNativeBuild
 jacoco.exec
-publish_maven.bat
